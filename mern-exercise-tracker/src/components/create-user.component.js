@@ -33,7 +33,7 @@ export default class CreatExercise extends Component {
 
         // using axios to send http post request with the json user object and the req
         axios.post('http://localhost:5000/users/add', user)
-            .then(res => console.log(res.data));
+            .then(response => console.log(response.data));
 
         // Resets the username back to blank so the user can enter another username
         this.setState({

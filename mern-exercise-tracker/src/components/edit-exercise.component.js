@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export default class EditExercise extends Component {
     constructor(props) {
+
         // always call super when making a constructor that extends component
         super(props);
 
@@ -29,7 +30,7 @@ export default class EditExercise extends Component {
     componentDidMount() {
 
         // axios is getting the current id from the url
-        axios.get('http://localhost:5000/exercises' + this.props.match.params.id)
+        axios.get('http://localhost:5000/exercises/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
                     username: response.data.username,
@@ -38,8 +39,11 @@ export default class EditExercise extends Component {
                     date: new Date(response.data.date)
                 })
             })
+            .catch(function (error) {
+                console.log(error);
+            })
 
-        axios.get('http://localhost:5000/users')
+        axios.get('http://localhost:5000/users/')
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -47,6 +51,10 @@ export default class EditExercise extends Component {
                     })
                 }
             })
+            .catch((error) => {
+                console.log(error);
+            })
+
     }
 
     onChangeUsername(e) {
@@ -74,6 +82,7 @@ export default class EditExercise extends Component {
     }
 
     onSubmit(e) {
+
         // prevents the default html form submit behavior
         e.preventDefault();
 
@@ -86,7 +95,7 @@ export default class EditExercise extends Component {
 
         console.log(exercise);
 
-        axios.post('http://localhost:5000/exercises/update'+this.props.match.params.id, exercise)
+        axios.post('http://localhost:5000/exercises/update/' + this.props.match.params.id, exercise)
             .then(res => console.log(res.data));
 
         // takes user back to the homepage
