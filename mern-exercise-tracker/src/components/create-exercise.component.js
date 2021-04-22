@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css"
+import "react-datepicker/dist/react-datepicker.css";
 
-export default class CreateExercises extends Component {
-
+export default class CreateExercise extends Component {
     constructor(props) {
+        // always call super when making a constructor that extends component
         super(props);
 
-        //ensures that each instance of 'this' is bound properly
+        //Explicitly defining each 'this', binding 'this' to each method
         this.onChangeUsername = this.onChangeUsername.bind(this);
         this.onChangeDescription = this.onChangeDescription.bind(this);
         this.onChangeDuration = this.onChangeDuration.bind(this);
@@ -21,15 +22,20 @@ export default class CreateExercises extends Component {
             date: new Date(),
             users: []
         }
-
     }
 
-    //adding a moc user to test out the submit feature. 
+    // called right before anything renders on the page.
+    // .map allows us to return something for each element in an array (users) 
     componentDidMount() {
-        this.setState({
-            users: ['test user'],
-            username: 'test user'
-        })
+        axios.get('http://localhost:5000/users')
+            .then(response => {
+                if (response.data.length > 0) {
+                    this.setState({
+                        users: response.data.map(user => user.username),
+                        username: response.data[0].username
+                    })
+                }
+            })
     }
 
     onChangeUsername(e) {
@@ -57,6 +63,7 @@ export default class CreateExercises extends Component {
     }
 
     onSubmit(e) {
+        // prevents the default html form submit behavior
         e.preventDefault();
 
         const exercise = {
@@ -68,7 +75,11 @@ export default class CreateExercises extends Component {
 
         console.log(exercise);
 
-        window.location = '/'
+        axios.post('http://localhost:5000/exercises/add', exercise)
+            .then(res => console.log(res.data));
+
+        // takes user back to the homepage
+        window.location = '/';
     }
 
     render() {
@@ -84,6 +95,7 @@ export default class CreateExercises extends Component {
                             value={this.state.username}
                             onChange={this.onChangeUsername}>
                             {
+                                // .map allows us to return something for each element in an array (users)
                                 this.state.users.map(function (user) {
                                     return <option
                                         key={user}

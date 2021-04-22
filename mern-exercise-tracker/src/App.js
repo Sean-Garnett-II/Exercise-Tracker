@@ -1,6 +1,6 @@
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Route} from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Navbar from "./components/navbar.component"
 import ExercisesList from "./components/exercises-list.component";
@@ -13,7 +13,7 @@ function App() {
     <Router>
       <div className="container">
         <Navbar />
-        <br/>
+        <br />
         <Route path="/" exact component={ExercisesList} />
         <Route path="/edit/:id" component={EditExercise} />
         <Route path="/create" component={CreateExercise} />
